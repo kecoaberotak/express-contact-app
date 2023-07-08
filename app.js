@@ -12,11 +12,6 @@ app.use(expressLayouts);
 // build-in middleware
 app.use(express.static('public'));
 
-// Application Level Middleware
-app.use((req, res, next) => {
-  console.log('Time: ', Date.now());
-  next();
-});
 
 app.get('/', (req, res) => {
   const member = [
@@ -49,9 +44,6 @@ app.get('/contact', (req, res) => {
   res.render('contact', {title : 'Halaman Contact', layout : 'layouts/main-layout.ejs'});
 })
 
-app.get('/product/:id', (req, res) => {
-  res.send(`Product ID : ${req.params.id} <br>Category : ${req.query.category}`)
-})
 
 // kalo halaman ga ada
 app.use('/', (req, res) => {
