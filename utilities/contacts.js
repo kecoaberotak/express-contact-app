@@ -12,11 +12,18 @@ if (!fs.existsSync(filePath)) {
   fs.writeFileSync(filePath, "[]", "utf-8");
 }
 
-// membaca file JSON
+// ambil data dari file JSON
 const loadContacts = () => {
   const fileBuffer = fs.readFileSync("./data/contact.json", "utf-8");
   const contacts = JSON.parse(fileBuffer);
   return contacts;
 };
 
-module.exports = { loadContacts };
+// cari kontak
+const findContact = (nama) => {
+  const contacts = loadContacts();
+  const contact = contacts.find(contact => contact.nama === nama);
+  return contact
+};
+
+module.exports = { loadContacts, findContact };

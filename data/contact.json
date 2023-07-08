@@ -1,10 +1,12 @@
 [
   {
     "nama"  : "John Doe",
-    "nomorHp" : "0895432417482"
+    "nomorHp" : "0895432417482",
+    "email"   : "john@doe.com"
   },
   {
     "nama"  : "Jane Doe",
-    "nomorHp" : "089547677482"
+    "nomorHp" : "089547677482",
+    "email"   : "jane@doe.com"
   }
 ]
