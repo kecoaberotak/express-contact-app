@@ -1,6 +1,6 @@
 const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
-const {loadContacts, findContact, addContact, cekDuplikat} = require('./utilities/contacts');
+const {loadContacts, findContact, addContact, cekDuplikat, deleteContact} = require('./utilities/contacts');
 const {body, validationResult, check} = require('express-validator');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
@@ -112,6 +112,19 @@ app.post('/contact',
     // kembali ke route get contact
     res.redirect('/contact');
   };
+});
+
+// proses hapus contact
+app.get('/contact/delete/:nama', (req, res) => {
+  const contact = findContact(req.params.nama);
+
+  if(!contact){
+    res.status(404);
+    res.send('<h1>404</h1>');
+  }else deleteContact(req.params.nama);
+
+  req.flash('msg', 'Data berhasil dihapus');
+  res.redirect('/contact');
 });
 
 
