@@ -71,17 +71,26 @@ app.post('/contact',
     return true;
   }),
   check('email', 'Email Tidak Valid').isEmail(), 
-  body('nomorHp').isMobilePhone('id-ID')
+  check('nomorHp', 'Nomor HP Tidak Valid').isMobilePhone('id-ID')
 ] ,(req, res) => {
 
   const errors = validationResult(req);
   if(!errors.isEmpty()){
-    return res.status(400).json({errors: errors.array()});
-  }
-  // addContact(req.body);
+    // ini defaultnya
+    // return res.status(400).json({errors: errors.array()});
 
-  // // kembali ke route get contact
-  // res.redirect('/contact');
+    res.render('add-contact', 
+    {
+      title   : 'Form Tambah Contact', 
+      layout  : 'layouts/main-layout.ejs',
+      errors  : errors.array()
+    });
+  } else {
+    addContact(req.body);
+
+    // kembali ke route get contact
+    res.redirect('/contact');
+  };
 });
 
 
