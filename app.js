@@ -70,12 +70,11 @@ app.get('/contact', (req, res) => {
     msg : req.flash('msg')});
 });
 
-// Router tambah contact
+// Router form tambah contact
 // Harus ditulis sebelum route detail biar kebaca
 app.get('/contact/add', (req, res) => {
   res.render('add-contact', {title : 'Form Tambah Contact', layout : 'layouts/main-layout.ejs'});
 });
-
 
 // Proses Tambah data contact
 // Kalo mau custom pesannya, pake check bukan body
@@ -125,6 +124,13 @@ app.get('/contact/delete/:nama', (req, res) => {
 
   req.flash('msg', 'Data berhasil dihapus');
   res.redirect('/contact');
+});
+
+// Route form Edit Contact
+app.get('/contact/edit/:nama', (req, res) => {
+  const contact = findContact(req.params.nama);
+
+  res.render('edit-contact', {title : 'Form Edit Contact', layout : 'layouts/main-layout.ejs'});
 });
 
 

@@ -14,6 +14,7 @@
             <% if (contact.email) { %>
               <p class="card-text"><%= contact.email %></p>
             <% } %>
+            <a href="/contact/edit/<%= contact.nama %>" class="btn btn-info badge"">Edit</a>
             <a href="/contact/delete/<%= contact.nama %>" class="btn btn-danger badge" onclick="return confirm('Ingin menghapus contact?')">Hapus</a>
             <a href="/contact" class="card-link d-block mt-3">&laquo; kembali ke daftar kontak</a>
           </div>
