@@ -2,6 +2,9 @@ const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
 const {loadContacts, findContact, addContact, cekDuplikat} = require('./utilities/contacts');
 const {body, validationResult, check} = require('express-validator');
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
+const flash = require('connect-flash');
 
 const app = express();
 const port = 3000
@@ -15,6 +18,16 @@ app.use(expressLayouts);
 // build-in middleware
 app.use(express.static('public'));
 app.use(express.urlencoded({extended: true}));
+
+// Konfigurasi flash
+app.use(cookieParser('secret'));
+app.use(session({
+  cookie: {maxAge:  6000},
+  secret: 'secret',
+  resave: true,
+  saveUninitialized: true
+}));
+app.use(flash());
 
 // Route root / halaman Home
 app.get('/', (req, res) => {
@@ -49,7 +62,12 @@ app.get('/about', (req, res) => {
 app.get('/contact', (req, res) => {
   const contacts = loadContacts();
 
-  res.render('contact', {title : 'Halaman Contact', layout : 'layouts/main-layout.ejs', contacts});
+  res.render('contact', 
+  {
+    title : 'Halaman Contact', 
+    layout : 'layouts/main-layout.ejs', 
+    contacts, 
+    msg : req.flash('msg')});
 });
 
 // Router tambah contact
@@ -87,6 +105,9 @@ app.post('/contact',
     });
   } else {
     addContact(req.body);
+
+    // kirim flash message
+    req.flash('msg', 'Data berhasil ditambahkan');
 
     // kembali ke route get contact
     res.redirect('/contact');
