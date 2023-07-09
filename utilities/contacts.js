@@ -7,14 +7,14 @@ if (!fs.existsSync(dirPath)) {
 }
 
 // check dan membuat file contact.json
-const filePath = "./data/contact.json";
+const filePath = "./data/contacts.json";
 if (!fs.existsSync(filePath)) {
   fs.writeFileSync(filePath, "[]", "utf-8");
 }
 
 // ambil data dari file JSON
 const loadContacts = () => {
-  const fileBuffer = fs.readFileSync("./data/contact.json", "utf-8");
+  const fileBuffer = fs.readFileSync("./data/contacts.json", "utf-8");
   const contacts = JSON.parse(fileBuffer);
   return contacts;
 };
@@ -26,4 +26,14 @@ const findContact = (nama) => {
   return contact
 };
 
-module.exports = { loadContacts, findContact };
+// menimpa file contacts.json dengan data baru
+const saveContacts = contacts => fs.writeFileSync('data/contacts.json', JSON.stringify(contacts));
+
+// menambahkan data contact
+const addContact = contact => {
+  const contacts = loadContacts();
+  contacts.push(contact);
+  saveContacts(contacts);
+};
+
+module.exports = { loadContacts, findContact, addContact };
