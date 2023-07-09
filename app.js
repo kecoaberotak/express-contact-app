@@ -130,7 +130,7 @@ app.get('/contact/delete/:nama', (req, res) => {
 app.get('/contact/edit/:nama', (req, res) => {
   const contact = findContact(req.params.nama);
 
-  res.render('edit-contact', {title : 'Form Edit Contact', layout : 'layouts/main-layout.ejs'});
+  res.render('edit-contact', {title : 'Form Edit Contact', layout : 'layouts/main-layout.ejs', contact});
 });
 
 
