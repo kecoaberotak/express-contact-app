@@ -49,4 +49,20 @@ const deleteContact = nama => {
   saveContacts(contactsFilter);
 };
 
-module.exports = { loadContacts, findContact, addContact, cekDuplikat, deleteContact };
+// Edit / update contact
+const updateContact = contactBaru => {
+  const contacts = loadContacts();
+
+  // hilangkan kontak lama 
+  const contactsFilter = contacts.filter(contact => contact.nama != contactBaru.oldNama);
+  
+  // hapus properti old nama
+  delete contactBaru.oldNama;
+
+  // masukin ke json
+  contactsFilter.push(contactBaru);
+  saveContacts(contactsFilter);
+
+};
+
+module.exports = { loadContacts, findContact, addContact, cekDuplikat, deleteContact, updateContact };
