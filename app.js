@@ -133,6 +133,43 @@ app.get('/contact/edit/:nama', (req, res) => {
   res.render('edit-contact', {title : 'Form Edit Contact', layout : 'layouts/main-layout.ejs', contact});
 });
 
+// Proses edit contact
+app.post('/contact/update', 
+[
+  body('nama').custom((value, {req}) => {
+    const duplikat = cekDuplikat(value);
+    if(value !== req.body.oldNama && duplikat){
+      throw new Error('Nama sudah ada');
+    }
+    return true;
+  }),
+  check('email', 'Email Tidak Valid').isEmail(), 
+  check('nomorHp', 'Nomor HP Tidak Valid').isMobilePhone('id-ID')
+] ,(req, res) => {
+  const errors = validationResult(req);
+  if(!errors.isEmpty()){
+    // ini defaultnya
+    // return res.status(400).json({errors: errors.array()});
+
+    res.render('edit-contact', 
+    {
+      title   : 'Form Edit Contact', 
+      layout  : 'layouts/main-layout.ejs',
+      errors  : errors.array(),
+      contact : req.body
+    });
+  } else {
+    res.send(req.body);
+    // addContact(req.body);
+
+    // // kirim flash message
+    // req.flash('msg', 'Data berhasil diedit');
+
+    // // kembali ke route get contact
+    // res.redirect('/contact');
+  };
+});
+
 
 // Route Detail Contact
 app.get('/contact/:nama', (req, res) => {

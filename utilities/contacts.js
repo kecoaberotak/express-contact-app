@@ -39,7 +39,7 @@ const addContact = contact => {
 // Cek Duplikat Nama
 const cekDuplikat = nama => {
   const contacts = loadContacts();
-  return contacts.find(contact => contact.nama === nama);
+  return contacts.find(contact => contact.nama.toLowerCase() === nama.toLowerCase());
 };
 
 // Delete Contact
