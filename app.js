@@ -1,6 +1,7 @@
 const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
-const {loadContacts, findContact, addContact} = require('./utilities/contacts')
+const {loadContacts, findContact, addContact, cekDuplikat} = require('./utilities/contacts');
+const {body, validationResult, check} = require('express-validator');
 
 const app = express();
 const port = 3000
@@ -13,7 +14,7 @@ app.use(expressLayouts);
 
 // build-in middleware
 app.use(express.static('public'));
-app.use(express.urlencoded());
+app.use(express.urlencoded({extended: true}));
 
 // Route root / halaman Home
 app.get('/', (req, res) => {
@@ -59,12 +60,30 @@ app.get('/contact/add', (req, res) => {
 
 
 // Proses Tambah data contact
-app.post('/contact', (req, res) => {
-  addContact(req.body);
+// Kalo mau custom pesannya, pake check bukan body
+app.post('/contact', 
+[
+  body('nama').custom(value => {
+    const duplikat = cekDuplikat(value);
+    if(duplikat){
+      throw new Error('Nama sudah ada');
+    }
+    return true;
+  }),
+  check('email', 'Email Tidak Valid').isEmail(), 
+  body('nomorHp').isMobilePhone('id-ID')
+] ,(req, res) => {
 
-  // kembali ke route get contact
-  res.redirect('/contact');
+  const errors = validationResult(req);
+  if(!errors.isEmpty()){
+    return res.status(400).json({errors: errors.array()});
+  }
+  // addContact(req.body);
+
+  // // kembali ke route get contact
+  // res.redirect('/contact');
 });
+
 
 // Route Detail Contact
 app.get('/contact/:nama', (req, res) => {
